@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Newsitem from "./Newsitem";
 import Spinner from "./Spinner";
+import InfiniteScroll from "react-infinite-scroll-component";
 import PropTypes from "prop-types";
 
 export default class Newsbox extends Component {
@@ -14,7 +15,7 @@ export default class Newsbox extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { articles: [], loading: false, page: 1 };
+    this.state = { articles: [], loading: true, page: 1 };
     document.title = `NewsBlocks - ${this.props.category}`;
   }
   async loadNews() {
@@ -26,7 +27,7 @@ export default class Newsbox extends Component {
         console.log(result);
         this.setState({
           loading: false,
-          articles: result.articles,
+          articles: this.state.articles.concat(result.articles),
           totalResults: result.totalResults,
         });
       });
@@ -52,11 +53,15 @@ export default class Newsbox extends Component {
     });
     this.loadNews();
   };
+  fetchMoreData = () => {
+    this.setState({ page: this.state.page + 1 });
+    this.loadNews();
+  };
 
   render() {
     return (
       <div>
-        {this.state.loading && <Spinner />}
+        {/* {this.state.loading && <Spinner />} */}
         <div className="flex flex-wrap p-5 border">
           {this.state.articles.map((element) => {
             return (
@@ -82,25 +87,17 @@ export default class Newsbox extends Component {
             );
           })}
         </div>
-        <div className="flex justify-between m-4">
-          <button
-            disabled={this.state.page <= 1}
-            className="inline-flex justify-center text-gray-400 bg-gray-800 py-2 px-6 focus:outline-none hover:bg-gray-700 hover:text-white rounded text-lg w-60"
-            onClick={this.handlePrevClick}
-          >
-            &larr; Previous
-          </button>
-          <button
-            disabled={
-              this.state.page + 1 >
-              Math.ceil(this.state.totalResults / this.props.pagesize)
-            }
-            className="inline-flex justify-center text-white bg-purple-500 py-2 px-6 focus:outline-none hover:bg-purple-600 rounded text-lg w-60"
-            onClick={this.handleNextClick}
-          >
-            Next &rarr;
-          </button>
-        </div>
+        <InfiniteScroll
+          dataLength={this.state.articles.length}
+          next={this.fetchMoreData}
+          hasMore={this.state.articles.length !== this.state.totalResults}
+          loader={<Spinner />}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        ></InfiniteScroll>
       </div>
     );
   }

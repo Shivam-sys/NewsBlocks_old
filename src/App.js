@@ -45,6 +45,18 @@ export default class App extends Component {
             ></Route>
             <Route
               exact
+              path="/Science"
+              element={
+                <Newsbox
+                  key="Science"
+                  country={this.state.country}
+                  pagesize={15}
+                  category="Science"
+                />
+              }
+            ></Route>
+            <Route
+              exact
               path="/Business"
               element={
                 <Newsbox

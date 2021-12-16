@@ -36,6 +36,9 @@ export default class Navbar extends Component {
               <Link to="/General" className="mr-5 hover:text-white">
                 General
               </Link>
+              <Link to="/Science" className="mr-5 hover:text-white">
+                Science
+              </Link>
               <Link to="/Health" className="mr-5 hover:text-white">
                 Health
               </Link>
