@@ -3,21 +3,32 @@ import "./App.css";
 import React, { Component } from "react";
 import Navbar from "./components/Navbar";
 import Newsbox from "./components/Newsbox";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoadingBar from "react-top-loading-bar";
 
 export default class App extends Component {
   constructor() {
     super();
-    this.state = { country: "in" };
+    this.state = { country: "in", progress: "10" };
   }
-  setCountry = () => {
-    this.setState({ country: "us" });
+  setCountry = (val) => {
+    this.setState({ country: val });
+  };
+  setProgress = (progress) => {
+    this.setState({ progress: progress });
   };
   render() {
     return (
       <>
         <Router>
-          <Navbar country={this.state.country} setCountry={this.setCountry} />
+          <LoadingBar
+            color="#f11946"
+            progress={this.state.progress}
+            onLoaderFinished={() => this.setProgress(0)}
+            height={3}
+          />
+          {/* <Navbar country={this.state.country} setCountry={this.setCountry} /> */}
+          <Navbar />
           <Routes>
             <Route
               exact
@@ -25,6 +36,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="General"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="General"
@@ -37,6 +49,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="General"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="General"
@@ -49,6 +62,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="Science"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="Science"
@@ -61,6 +75,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="Business"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="Business"
@@ -73,6 +88,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="Entertainment"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="Entertainment"
@@ -85,6 +101,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="Health"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="Health"
@@ -97,6 +114,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="Sports"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="Sports"
@@ -109,6 +127,7 @@ export default class App extends Component {
               element={
                 <Newsbox
                   key="Technology"
+                  setProgress={this.setProgress}
                   country={this.state.country}
                   pagesize={15}
                   category="Technology"

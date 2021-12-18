@@ -5,6 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import PropTypes from "prop-types";
 
 export default class Newsbox extends Component {
+  apiKey = process.env.REACT_APP_API_KEY
   static defaultProps = {
     pagesize: 15,
     category: "General",
@@ -19,17 +20,20 @@ export default class Newsbox extends Component {
     document.title = `NewsBlocks - ${this.props.category}`;
   }
   async loadNews() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=3aac18a6e647442d9e77c1fba48bf26b&page=${this.state.page}&pagesize=${this.props.pagesize}`;
+    this.props.setProgress(20);
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.apiKey}&page=${this.state.page}&pagesize=${this.props.pagesize}`;
     this.setState({ loading: true });
+    this.props.setProgress(30);
     await fetch(url)
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
+        this.props.setProgress(70);
         this.setState({
           loading: false,
           articles: this.state.articles.concat(result.articles),
           totalResults: result.totalResults,
         });
+        this.props.setProgress(100);
       });
   }
   async componentDidMount() {
